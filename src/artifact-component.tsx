@@ -26,22 +26,27 @@ const WhatsAppChat = () => {
     simulateTyping?: boolean;
   }> = [
     { 
-      text: "Hi Yaniv, got your number online, you want to buy the ticket to Varna?", 
+      text: "Hi Yaniv, you're buying the ticket?", 
       sent: false, 
       typingTime: 2500 
     },
     { 
-      text: "Hi! yes I was thinking 555 ILS, works for you?", 
+      text: "hi! 🙂 yes, can we do 555 ILS ?", 
       sent: true,
       simulateTyping: true 
     },
     { 
-      text: "cool, this is my Digital Shekel address: 69cb8078-15e0-4464-94e8-6fe77b456f3f", 
+      text: "That's OK. Here's my Digital Shekel address", 
       sent: false, 
       typingTime: 3000 
     },
     { 
-      text: "no prob, locking money, thanks!", 
+      text: " 69cb8078-15e0-4464-94e8-6fe77b456f3f", 
+      sent: false, 
+      typingTime: 2500 
+    },
+    { 
+      text: "cool, locking money now, thanks! 🙏🙏🙏", 
       sent: true,
       simulateTyping: true 
     }
