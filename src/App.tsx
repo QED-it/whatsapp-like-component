@@ -1,10 +1,10 @@
 import './App.css'
-import Artifact from './artifact-component'
+import TicketChangeApp from './artifact-component.tsx'
 
 function App() {
   return (
     <>
-      <Artifact />
+      <TicketChangeApp />
     </>
   )
 }

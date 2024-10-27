@@ -1,120 +1,309 @@
-import React, { useState } from 'react';
-import { AlertCircle, Mail, Lock, User, Github, Facebook, Twitter } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect } from 'react';
+import { Lock } from 'lucide-react';
 
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [website, setWebsite] = useState('');
-  const [error, setError] = useState('');
+const TicketChangeApp = () => {
+  const [state, setState] = useState({
+    copyingField: '',
+    websiteVisited: false,
+    nameChanged: false,
+    confirmationMessage: '',
+    showScanning: false,
+    loading: false,
+    detectedName: '',
+    monitoringActive: false
+  });
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (!email || !password || !website) {
-      setError('Please fill in all fields');
-    } else {
-      setError('');
-      console.log('Login attempted:', { email, password, website });
-      // Here you would typically handle the login logic
-      alert(`Login attempted: ${email}, ${password}, ${website}`);
-    }
+  const handleCopy = (text, field) => {
+    navigator.clipboard.writeText(text);
+    setState(prev => ({ ...prev, copyingField: field }));
+    setTimeout(() => setState(prev => ({ ...prev, copyingField: '' })), 2000);
   };
 
-  const handleSocialLogin = (platform) => {
-    console.log(`${platform} login attempted`);
-    // Here you would typically handle the social login logic
-    alert(`${platform} login attempted`);
+  const handleScanWebsite = () => {
+    setState(prev => ({
+      ...prev,
+      loading: true,
+      showScanning: false,
+      websiteVisited: false,
+      detectedName: ''
+    }));
+
+    // Simulate website loading and scanning
+    setTimeout(() => {
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        showScanning: true
+      }));
+
+      // Show detected name after scanning
+      setTimeout(() => {
+        setState(prev => ({
+          ...prev,
+          websiteVisited: true,
+          detectedName: 'Jonathan Rouach'
+        }));
+      }, 2000);
+    }, 1500);
+  };
+
+  const handleNameChanged = () => {
+    setState(prev => ({
+      ...prev,
+      nameChanged: true,
+      confirmationMessage: '✓ Name change detected. Sending for verification...'
+    }));
+
+    setTimeout(() => {
+      setState(prev => ({
+        ...prev,
+        confirmationMessage: '✓ Name change detected. Verification request sent!'
+      }));
+    }, 2000);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Demo Component</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                icon={<Mail className="h-4 w-4 text-gray-500" />}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                icon={<Lock className="h-4 w-4 text-gray-500" />}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="website">Target Website</Label>
-              <Select onValueChange={setWebsite}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a website" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="website1">Website 1</SelectItem>
-                  <SelectItem value="website2">Website 2</SelectItem>
-                  <SelectItem value="website3">Website 3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <Button type="submit" className="w-full">Log In</Button>
-          </form>
+    <div style={{ 
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      backgroundColor: '#0f1218',
+      padding: '20px'
+    }}>
+      <div style={{ 
+        width: '450px',
+        backgroundColor: '#1C1C1C',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        color: 'white'
+      }}>
+        {/* Header */}
+        <div style={{
+          padding: '12px 20px',
+          borderBottom: '1px solid #333',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          backgroundColor: '#242424'
+        }}>
+          <span>QEDIT Web Prover</span>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px' }}>
+            <span>🔈</span>
+            <span>✕</span>
+          </div>
+        </div>
 
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
+        {/* Main Content */}
+        <div style={{ padding: '20px' }}>
+          {/* Locked Deposit Message */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            marginBottom: '16px'
+          }}>
+            <Lock size={16} style={{ color: '#FFD700' }} />
+            <span>
+              Yaniv Raveh has made a locked deposit of{' '}
+              <span style={{ color: '#FFD700' }}>₪555</span>
+            </span>
+          </div>
+
+          <p style={{ 
+            color: '#ccc',
+            marginBottom: '20px'
+          }}>
+            To receive the funds, please change the required details on your flight ticket to:
+          </p>
+
+          {/* Details Box */}
+          <div style={{
+            border: '1px solid #4a90e2',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '20px',
+            backgroundColor: '#242424'
+          }}>
+            <div style={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '8px'
+            }}>
+              <span>First Name: <strong>Yaniv</strong></span>
+              <button 
+                onClick={() => handleCopy('Yaniv', 'firstName')}
+                style={{
+                  padding: '2px 12px',
+                  backgroundColor: '#4a90e2',
+                  border: 'none',
+                  borderRadius: '4px',
+                  color: 'white',
+                  cursor: 'pointer'
+                }}
+              >
+                {state.copyingField === 'firstName' ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            
+            <div style={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '8px'
+            }}>
+              <span>Last Name: <strong>Raveh</strong></span>
+              <button 
+                onClick={() => handleCopy('Raveh', 'lastName')}
+                style={{
+                  padding: '2px 12px',
+                  backgroundColor: '#4a90e2',
+                  border: 'none',
+                  borderRadius: '4px',
+                  color: 'white',
+                  cursor: 'pointer'
+                }}
+              >
+                {state.copyingField === 'lastName' ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: '8px' }}>
+              Gender: <strong>Male</strong>
+            </div>
+            
+            <div>
+              Age Group: <strong>Adult</strong>
+            </div>
+          </div>
+
+          {/* Monitoring Connection Button */}
+          <button
+            onClick={handleScanWebsite}
+            disabled={state.nameChanged}
+            style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: '#4a90e2',
+              border: 'none',
+              borderRadius: '4px',
+              color: 'white',
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              cursor: state.nameChanged ? 'not-allowed' : 'pointer',
+              opacity: state.nameChanged ? 0.5 : 1,
+            }}
+          >
+            <div className="blinking-dot" style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: '#2ecc71'
+            }} />
+            Monitoring Connection ...
+          </button>
+
+          {/* Loading/Scanning Messages */}
+          {state.loading && (
+            <div style={{ textAlign: 'center', marginBottom: '16px', color: '#ccc' }}>
+              Loading website...
+            </div>
           )}
 
-          <div className="relative mt-6">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+          {state.showScanning && !state.websiteVisited && (
+            <div style={{ textAlign: 'center', marginBottom: '16px', color: '#ccc' }}>
+              <span style={{
+                display: 'inline-block',
+                width: '20px',
+                height: '20px',
+                border: '3px solid rgba(255, 255, 255, 0.1)',
+                borderTopColor: '#4a90e2',
+                borderRadius: '50%',
+                animation: 'spin 1s ease-in-out infinite',
+                marginRight: '8px',
+                verticalAlign: 'middle'
+              }} />
+              Scanning data...
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+          )}
+
+          {/* Detected Name */}
+          {state.detectedName && (
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: '#ccc',
+                marginBottom: '8px'
+              }}>
+                <span style={{ color: '#2ecc71' }}>✓</span>
+                Detected name:
+              </div>
+              <div style={{
+                display: 'inline-block',
+                padding: '4px 8px',
+                backgroundColor: '#FFD700',
+                color: 'black',
+                borderRadius: '4px',
+                fontWeight: 'bold'
+              }}>
+                {state.detectedName}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="flex space-x-4 mt-6">
-            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('Github')}>
-              <Github className="mr-2 h-4 w-4" /> Github
-            </Button>
-            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('Facebook')}>
-              <Facebook className="mr-2 h-4 w-4" /> Facebook
-            </Button>
-            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('Twitter')}>
-              <Twitter className="mr-2 h-4 w-4" /> Twitter
-            </Button>
-          </div>
+          {/* Change Details Button */}
+          <button
+            onClick={handleNameChanged}
+            disabled={!state.websiteVisited || state.nameChanged}
+            style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: '#4a90e2',
+              border: 'none',
+              borderRadius: '4px',
+              color: 'white',
+              cursor: (!state.websiteVisited || state.nameChanged) ? 'not-allowed' : 'pointer',
+              opacity: (!state.websiteVisited || state.nameChanged) ? 0.5 : 1
+            }}
+          >
+            I've changed the flight details!
+          </button>
 
-          <div className="text-center text-sm mt-6">
-            Don't have an account?{' '}
-            <Button variant="link" className="p-0">
-              Sign up
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          {/* Confirmation Message */}
+          {state.confirmationMessage && (
+            <div style={{ 
+              marginTop: '16px',
+              textAlign: 'center',
+              color: '#2ecc71'
+            }}>
+              {state.confirmationMessage}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        
+        @keyframes blink {
+          0% { opacity: 0; }
+          50% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        
+        .blinking-dot {
+          animation: blink 1s infinite;
+        }
+      `}</style>
     </div>
   );
 };
 
-export default LoginForm;
+export default TicketChangeApp;
