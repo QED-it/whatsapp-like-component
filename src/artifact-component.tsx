@@ -1,8 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Lock } from 'lucide-react';
 
+interface AppState {
+  copyingField: string;
+  websiteVisited: boolean;
+  nameChanged: boolean;
+  confirmationMessage: string;
+  showScanning: boolean;
+  loading: boolean;
+  detectedName: string;
+  monitoringActive: boolean;
+}
+
 const TicketChangeApp = () => {
-  const [state, setState] = useState({
+  const [state, setState] = useState<AppState>({
     copyingField: '',
     websiteVisited: false,
     nameChanged: false,
@@ -13,7 +24,7 @@ const TicketChangeApp = () => {
     monitoringActive: false
   });
 
-  const handleCopy = (text, field) => {
+  const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
     setState(prev => ({ ...prev, copyingField: field }));
     setTimeout(() => setState(prev => ({ ...prev, copyingField: '' })), 2000);
@@ -287,7 +298,7 @@ const TicketChangeApp = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
