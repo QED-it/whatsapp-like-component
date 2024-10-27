@@ -126,10 +126,11 @@ const WhatsAppChat = () => {
   };
 
   return (
-    <div className="fixed inset-0 bg-white">
-      <div className="w-full max-w-md mx-auto h-full relative overflow-hidden" style={{ 
+    <div className="fixed inset-0 bg-white flex items-center justify-center">
+      <div className="w-full max-w-xl mx-auto h-[80vh] relative overflow-hidden" style={{ 
         '--tw-bg-opacity': '1',
-        backgroundColor: 'rgb(200 243 200 / var(--tw-bg-opacity))'
+        backgroundColor: 'rgb(200 243 200 / var(--tw-bg-opacity))',
+        transform: 'scale(1.2)'
       }}>
         {/* Header */}
         <div className="bg-green-700 text-white p-4 flex items-center justify-between sticky top-0 z-10">
