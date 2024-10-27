@@ -36,7 +36,8 @@ const TicketChangeApp = () => {
       loading: true,
       showScanning: false,
       websiteVisited: false,
-      detectedName: ''
+      detectedName: '',
+      monitoringActive: true
     }));
 
     // Simulate website loading and scanning
@@ -208,13 +209,19 @@ const TicketChangeApp = () => {
               opacity: state.nameChanged ? 0.5 : 1,
             }}
           >
-            <div className="blinking-dot" style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: '#2ecc71'
-            }} />
-            Monitoring Connection ...
+            {state.monitoringActive ? (
+              <>
+                <div className="blinking-dot" style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: '#2ecc71'
+                }} />
+                Monitoring Connection ...
+              </>
+            ) : (
+              <>Connect to witch-air.com</>
+            )}
           </button>
 
           {/* Loading/Scanning Messages */}
