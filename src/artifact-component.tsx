@@ -1,9 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, Send, Smile, MoreVertical, Phone, Video, Paperclip } from 'lucide-react';
 
 const WhatsAppChat = () => {
-  // ... keeping all the state and functions the same ...
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Array<{
+    id: number;
+    text: string;
+    sent: boolean;
+    time: string;
+  }>>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -11,11 +15,16 @@ const WhatsAppChat = () => {
   const [isSimulatingTyping, setIsSimulatingTyping] = useState(false);
   const conversationStartedRef = useRef(false);
   const [showReaction, setShowReaction] = useState(false);
-  const chatEndRef = useRef(null);
-  const inputRef = useRef(null);
-  const activeKeyRef = useRef(null);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const activeKeyRef = useRef<string | null>(null);
 
-  const conversation = [
+  const conversation: Array<{
+    text: string;
+    sent: boolean;
+    typingTime?: number;
+    simulateTyping?: boolean;
+  }> = [
     { 
       text: "Hi Yaniv, got your number online, you want to buy the ticket to Varna?", 
       sent: false, 
@@ -38,7 +47,7 @@ const WhatsAppChat = () => {
     }
   ];
 
-  const scrollToBottom = (force = false) => {
+  const scrollToBottom = (force = false): void => {
     if (force) {
       setTimeout(() => {
         window.scrollTo(0, document.body.scrollHeight);
@@ -68,7 +77,7 @@ const WhatsAppChat = () => {
     setShowCaret(false);
   }, [isSimulatingTyping]);
 
-  const simulateKeyPress = async (text) => {
+  const simulateKeyPress = async (text: string): Promise<void> => {
     setIsSimulatingTyping(true);
     setShowKeyboard(true);
     setInputText('');
@@ -78,6 +87,7 @@ const WhatsAppChat = () => {
       activeKeyRef.current = char;
       setInputText(text.substring(0, i + 1));
       if (inputRef.current) {
+        // Safe access to HTMLInputElement properties
         inputRef.current.scrollLeft = inputRef.current.scrollWidth;
       }
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -90,7 +100,7 @@ const WhatsAppChat = () => {
     setIsSimulatingTyping(false);
   };
 
-  const addMessage = (text, sent = true, isLast = false) => {
+  const addMessage = (text: string, sent = true, isLast = false): void => {
     const now = new Date();
     const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     setMessages(prev => [...prev, { id: prev.length + 1, text, sent, time }]);
@@ -102,7 +112,7 @@ const WhatsAppChat = () => {
     }
   };
 
-  const playConversation = async () => {
+  const playConversation = async (): Promise<void> => {
     for (const [index, message] of conversation.entries()) {
       if (index > 0) {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -128,7 +138,6 @@ const WhatsAppChat = () => {
   return (
     <div className="fixed inset-0 bg-white flex items-center justify-center">
       <div className="w-full max-w-xl mx-auto h-[80vh] relative overflow-hidden" style={{ 
-        '--tw-bg-opacity': '1',
         backgroundColor: 'rgb(200 243 200 / var(--tw-bg-opacity))',
         transform: 'scale(1.2)'
       }}>
@@ -289,7 +298,7 @@ const WhatsAppChat = () => {
                   <span 
                     className="absolute top-1/2 transform -translate-y-1/2 w-0.5 h-5 bg-black animate-pulse"
                     style={{
-                      left: `${inputRef.current?.scrollLeft + inputRef.current?.value.length * 8 + 8}px`
+                      left: `${(inputRef.current?.scrollLeft || 0) + (inputRef.current?.value?.length || 0) * 8 + 8}px`
                     }}
                   />
                 )}
