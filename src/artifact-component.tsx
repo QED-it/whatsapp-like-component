@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Lock } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface AppState {
