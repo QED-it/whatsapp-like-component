@@ -104,26 +104,25 @@ const TicketChangeApp = () => {
       setState(prev => ({
         ...prev,
         detectedName: 'Yaniv Raveh',
-        confirmationMessage: prev.confirmationMessage + '✓ \nCreating proof... '
+        confirmationMessage: prev.confirmationMessage + '✅ \nCreating proof... '
       }));
     }, 1000);
 
     setTimeout(() => {
       setState(prev => ({
         ...prev,
-        confirmationMessage: prev.confirmationMessage + '✓\nVerifying proof...'
+        confirmationMessage: prev.confirmationMessage + '✅\nVerifying proof... '
       }));
     }, 5000);
 
     setTimeout(() => {
       setState(prev => ({
         ...prev,
-        confirmationMessage: prev.confirmationMessage + '✓\n\nSuccess! The funds will be released shortly.'
+        confirmationMessage: prev.confirmationMessage + '✅\n\nSuccess! The funds will be released shortly.'
       }));
       
       // Fire initial confetti
       fireConfetti();
-
     }, 6000);
   };
 
@@ -192,11 +191,18 @@ const TicketChangeApp = () => {
               gap: '8px',
               marginBottom: '16px'
             }}>
-              <Lock size={16} style={{ color: '#FFD700' }} />
-              <span>
-                Yaniv Raveh has made a locked deposit of{' '}
-                <span style={{ color: '#FFD700' }}>₪555</span>
-              </span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <span>Yaniv Raveh has locked a deposit of:</span>
+                <span style={{ marginLeft: 'auto' }}>🔒</span>
+                <span style={{ 
+                  color: '#FFD700',
+                  fontSize: '1.2em',
+                  fontWeight: 'bold',
+                  textShadow: '0 0 3px rgba(255, 215, 0, 0.5)',
+                  filter: 'brightness(1.05)',
+                  marginLeft: '8px'
+                }}>₪555</span>
+              </div>
             </div>
 
             <p style={{ 
@@ -330,25 +336,18 @@ const TicketChangeApp = () => {
                 <div style={{ 
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  justifyContent: 'space-between',  // Changed from center to space-between
                   color: '#ccc',
                   marginBottom: '8px',
-                  justifyContent: 'center'  // Center the "Detected name" text
                 }}>
-                  <span style={{ color: '#2ecc71' }}>✓</span>
-                  Detected name:
-                </div>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'center'  // Center the name container
-                }}>
+                  <span>Detected name:</span>
                   <div style={{
                     padding: '8px 16px',
                     border: '2px solid #FFD700',
                     color: '#FFD700',
                     borderRadius: '4px',
                     fontWeight: 'bold',
-                    backgroundColor: 'transparent'  // Empty interior
+                    backgroundColor: 'transparent'
                   }}>
                     {state.detectedName}
                   </div>
@@ -371,7 +370,7 @@ const TicketChangeApp = () => {
                 opacity: (!state.websiteVisited || state.nameChanged) ? 0.5 : 1
               }}
             >
-              I've changed the flight details!
+              I've changed the passenger details!
             </button>
 
             {/* Confirmation Message */}
@@ -379,8 +378,8 @@ const TicketChangeApp = () => {
               <div style={{ 
                 marginTop: '16px',
                 textAlign: 'left',
-                color: '#2ecc71',
-                whiteSpace: 'pre-line'  // This ensures line breaks are respected
+                color: 'white',  // Changed from #2ecc71 to white
+                whiteSpace: 'pre-line'
               }}>
                 {state.confirmationMessage}
               </div>
