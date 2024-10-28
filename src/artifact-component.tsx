@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Lock } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface AppState {
   copyingField: string;
@@ -59,19 +60,71 @@ const TicketChangeApp = () => {
     }, 1500);
   };
 
+  const fireConfetti = () => {
+    // Calculate origin.x based on panel width (450px) relative to window width
+    const panelWidth = 450;
+    const windowWidth = window.innerWidth;
+    const rightPanelStart = (windowWidth - panelWidth) / windowWidth;
+
+    // Left corner of panel
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      origin: { 
+        x: rightPanelStart, // Position at left edge of panel
+        y: 0.9 
+      },
+      colors: ['#4a90e2', '#2ecc71', '#FFD700'],
+      gravity: 0.8,
+      angle: 60
+    });
+
+    // Right corner of panel
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      origin: { 
+        x: 1, // Right edge of screen
+        y: 0.9 
+      },
+      colors: ['#4a90e2', '#2ecc71', '#FFD700'],
+      gravity: 0.8,
+      angle: 120
+    });
+  };
+
   const handleNameChanged = () => {
     setState(prev => ({
       ...prev,
       nameChanged: true,
-      confirmationMessage: '✓ Name change detected. Sending for verification...'
+      confirmationMessage: 'Detecting correct name change... '
     }));
 
     setTimeout(() => {
       setState(prev => ({
         ...prev,
-        confirmationMessage: '✓ Name change detected. Verification request sent!'
+        detectedName: 'Yaniv Raveh',
+        confirmationMessage: prev.confirmationMessage + '✓ \nCreating proof... '
       }));
-    }, 2000);
+    }, 1000);
+
+    setTimeout(() => {
+      setState(prev => ({
+        ...prev,
+        confirmationMessage: prev.confirmationMessage + '✓\nVerifying proof...'
+      }));
+    }, 5000);
+
+    setTimeout(() => {
+      setState(prev => ({
+        ...prev,
+        confirmationMessage: prev.confirmationMessage + '✓\n\nSuccess! The funds will be released shortly.'
+      }));
+      
+      // Fire initial confetti
+      fireConfetti();
+
+    }, 6000);
   };
 
   const QeditLogo = () => (
@@ -150,7 +203,7 @@ const TicketChangeApp = () => {
               color: '#ccc',
               marginBottom: '20px'
             }}>
-              To receive the funds, please change the required details on your flight ticket to:
+              To receive the funds, <br />Please change the passenger details to:
             </p>
 
             {/* Details Box */}
@@ -279,20 +332,26 @@ const TicketChangeApp = () => {
                   alignItems: 'center',
                   gap: '8px',
                   color: '#ccc',
-                  marginBottom: '8px'
+                  marginBottom: '8px',
+                  justifyContent: 'center'  // Center the "Detected name" text
                 }}>
                   <span style={{ color: '#2ecc71' }}>✓</span>
                   Detected name:
                 </div>
                 <div style={{
-                  display: 'inline-block',
-                  padding: '4px 8px',
-                  backgroundColor: '#FFD700',
-                  color: 'black',
-                  borderRadius: '4px',
-                  fontWeight: 'bold'
+                  display: 'flex',
+                  justifyContent: 'center'  // Center the name container
                 }}>
-                  {state.detectedName}
+                  <div style={{
+                    padding: '8px 16px',
+                    border: '2px solid #FFD700',
+                    color: '#FFD700',
+                    borderRadius: '4px',
+                    fontWeight: 'bold',
+                    backgroundColor: 'transparent'  // Empty interior
+                  }}>
+                    {state.detectedName}
+                  </div>
                 </div>
               </div>
             )}
@@ -319,8 +378,9 @@ const TicketChangeApp = () => {
             {state.confirmationMessage && (
               <div style={{ 
                 marginTop: '16px',
-                textAlign: 'center',
-                color: '#2ecc71'
+                textAlign: 'left',
+                color: '#2ecc71',
+                whiteSpace: 'pre-line'  // This ensures line breaks are respected
               }}>
                 {state.confirmationMessage}
               </div>
@@ -330,13 +390,18 @@ const TicketChangeApp = () => {
             <div style={{
               marginTop: '32px',
               display: 'flex',
-              alignItems: 'right',
+              alignItems: 'center',  // Changed from 'right' to 'center'
               justifyContent: 'right',
               gap: '8px',
               color: 'white',
               fontSize: '14px'
             }}>
-              <span>Verified by</span>
+              <span style={{ 
+                display: 'flex', 
+                alignItems: 'center'  // Added to vertically center the text
+              }}>
+                Verified by
+              </span>
               <QeditLogo />
             </div>
           </div>
